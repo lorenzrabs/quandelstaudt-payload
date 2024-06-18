@@ -46,8 +46,6 @@ export default async function Page({ params }) {
     })
   }
 
-  console.log(data)
-
   if (!data.docs[0]) return notFound()
 
   return (
