@@ -18,12 +18,14 @@ export default async function Page({ params }) {
 
   let data
 
+  console.log('draftMode: ', isEnabled)
+
   if (!isEnabled) {
     data = await payload.find({
       collection: 'docs',
       where: {
         slug: {
-          equals: exclude,
+          equals: params.slug,
         },
         _status: {
           equals: 'published',
@@ -42,21 +44,20 @@ export default async function Page({ params }) {
       draft: true,
       limit: 1,
     })
-
-    console.log('draftMode: ', isEnabled)
-    console.log(data)
-
-    if (!data.docs[0]) return notFound()
-
-    return (
-      <>
-        <RefreshRouteOnSave />
-        <main className="flex flex-col w-full my-8 px-4 gap-8 md:max-w-xl lg:max-w-4xl">
-          <Hero data={data.docs[0]} />
-          <BlockRenderer layout={data.docs[0].layout} />
-          <DocsPreview title={'Other Docs'} exclude={params.slug} />
-        </main>
-      </>
-    )
   }
+
+  console.log(data)
+
+  if (!data.docs[0]) return notFound()
+
+  return (
+    <>
+      <RefreshRouteOnSave />
+      <main className="flex flex-col w-full my-8 px-4 gap-8 md:max-w-xl lg:max-w-4xl">
+        <Hero data={data.docs[0]} />
+        <BlockRenderer layout={data.docs[0].layout} />
+        <DocsPreview title={'Other Docs'} exclude={params.slug} />
+      </main>
+    </>
+  )
 }

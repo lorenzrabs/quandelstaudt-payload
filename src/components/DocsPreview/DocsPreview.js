@@ -11,13 +11,12 @@ export default async function DocsPreview({ exclude = '', title }) {
     collection: 'docs',
     where: {
       slug: {
-        equals: exclude,
+        not_equals: exclude,
       },
       _status: {
         equals: 'published',
       },
     },
-    limit: 2,
   })
 
   console.log(data)
