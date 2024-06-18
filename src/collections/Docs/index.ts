@@ -1,8 +1,7 @@
 import type { CollectionConfig } from 'payload/types'
 import Quote from '@/components/Quote/Quote.schema'
 import RichText from '@/components/RichText/RichText.schema'
-import { loggedIn } from './access/loggedIn'
-import { publishedOrLoggedIn } from './access/publishedOrLoggedIn'
+import formatSlug from './hooks/formatSlug'
 
 export const Docs: CollectionConfig = {
   slug: 'docs',
@@ -16,12 +15,6 @@ export const Docs: CollectionConfig = {
     preview: (data) => {
       return `${process.env.NEXT_PUBLIC_BASE_URL}/api/draft?&secret=${process.env.PAYLOAD_PUBLIC_DRAFT_SECRET}&collection=docs&slug=${data.slug}`
     },
-  },
-  access: {
-    read: publishedOrLoggedIn,
-    create: loggedIn,
-    update: loggedIn,
-    delete: loggedIn,
   },
   versions: {
     drafts: {
@@ -38,8 +31,15 @@ export const Docs: CollectionConfig = {
     },
     {
       name: 'slug',
+      label: 'Slug',
       type: 'text',
-      required: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [formatSlug('title')],
+      },
     },
     {
       name: 'author',

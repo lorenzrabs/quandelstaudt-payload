@@ -17,9 +17,8 @@ export default async function DocsPreview({ exclude = '', title }) {
         equals: 'published',
       },
     },
+    limit: 2,
   })
-
-  console.log(data)
 
   const { docs } = data
 
